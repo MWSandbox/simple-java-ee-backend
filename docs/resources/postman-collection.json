@@ -1,0 +1,174 @@
+{
+	"info": {
+		"_postman_id": "a199a1a7-4965-43a4-bbb2-46e2f6392cc2",
+		"name": "mdevoc Test App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/counter/id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rest-url}}/counter/1",
+					"host": [
+						"{{rest-url}}"
+					],
+					"path": [
+						"counter",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/counter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rest-url}}/counter",
+					"host": [
+						"{{rest-url}}"
+					],
+					"path": [
+						"counter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/counter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"count\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rest-url}}/counter",
+					"host": [
+						"{{rest-url}}"
+					],
+					"path": [
+						"counter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/counter",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"count\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rest-url}}/counter",
+					"host": [
+						"{{rest-url}}"
+					],
+					"path": [
+						"counter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/counter/id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{rest-url}}/counter/1",
+					"host": [
+						"{{rest-url}}"
+					],
+					"path": [
+						"counter",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/counter",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{rest-url}}/counter",
+					"host": [
+						"{{rest-url}}"
+					],
+					"path": [
+						"counter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/schema",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{rest-url}}/schema",
+					"host": [
+						"{{rest-url}}"
+					],
+					"path": [
+						"schema"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "rest-url",
+			"value": "http://localhost:8080/simple-java-rest-backend/rest"
+		}
+	]
+}

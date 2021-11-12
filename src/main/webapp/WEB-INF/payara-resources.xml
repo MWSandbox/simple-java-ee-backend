@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC "-//Payara.fish//DTD Payara Server 4 Resource Definitions//EN"
+        "https://raw.githubusercontent.com/payara/Payara-Community-Documentation/master/docs/modules/ROOT/pages/schemas/payara-resources_1_6.dtd">
+<resources>
+
+    <!-- ATTENTION: Password provided in plain text for test database. Please do not use for production -->
+    <jdbc-connection-pool name="jdbc/simpleDbPool"
+                          res-type="javax.sql.DataSource"
+                          datasource-classname="org.postgresql.ds.PGSimpleDataSource">
+        <property name="user" value="simple-db"/>
+        <property name="password" value="simple-db"/>
+        <property name="databaseName" value="simple-db"/>
+        <property name="serverName" value="mdevoc_simple-db_1"/>
+        <property name="port" value="5432"/>
+    </jdbc-connection-pool>
+
+    <jdbc-resource jndi-name="jdbc/simpleDb" pool-name="jdbc/simpleDbPool">
+    </jdbc-resource>
+</resources>
