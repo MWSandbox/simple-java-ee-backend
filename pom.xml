@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.mdevoc</groupId>
   <artifactId>simple-java-rest-backend</artifactId>
@@ -13,7 +13,32 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <docker.compose.project>mdevoc</docker.compose.project>
+    <is.up.skipped>true</is.up.skipped>
+    <is.down.skipped>true</is.down.skipped>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>run</id>
+      <properties>
+        <is.up.skipped>false</is.up.skipped>
+      </properties>
+    </profile>
+    <profile>
+      <id>shutdown</id>
+      <properties>
+        <is.down.skipped>false</is.down.skipped>
+      </properties>
+    </profile>
+    <profile>
+      <id>redeploy</id>
+      <properties>
+        <is.up.skipped>false</is.up.skipped>
+        <is.down.skipped>false</is.down.skipped>
+      </properties>
+    </profile>
+  </profiles>
 
   <dependencyManagement>
     <dependencies>
@@ -136,27 +161,60 @@
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.0.0</version>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.38.0</version>
         <executions>
           <execution>
             <id>docker-build</id>
             <phase>install</phase>
             <goals>
-              <goal>exec</goal>
+              <goal>build</goal>
             </goals>
             <configuration>
-              <executable>docker</executable>
-              <workingDirectory>${project.basedir}</workingDirectory>
-              <arguments>
-                <argument>build</argument>
-                <argument>-t</argument>
-                <argument>${project.groupId}/${project.artifactId}:${project.version}</argument>
-                <argument>--build-arg</argument>
-                <argument>WAR_NAME=simple-java-rest-backend</argument>
-                <argument>.</argument>
-              </arguments>
+              <images>
+                <image>
+                  <name>com.mdevoc/simple-java-rest-backend:${project.version}</name>
+                  <build>
+                    <dockerFileDir>${project.basedir}</dockerFileDir>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.dkanejs.maven.plugins</groupId>
+        <artifactId>docker-compose-maven-plugin</artifactId>
+        <version>4.0.0</version>
+        <executions>
+          <execution>
+            <id>docker-compose-up</id>
+            <phase>install</phase>
+            <goals>
+              <goal>up</goal>
+            </goals>
+            <configuration>
+              <composeFile>${project.basedir}/docker-compose.yml</composeFile>
+              <envFile>${project.basedir}/.env</envFile>
+              <detachedMode>true</detachedMode>
+              <projectName>${docker.compose.project}</projectName>
+              <skip>${is.up.skipped}</skip>
+            </configuration>
+          </execution>
+          <execution>
+            <id>docker-compose-down</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>down</goal>
+            </goals>
+            <configuration>
+              <composeFile>${project.basedir}/docker-compose.yml</composeFile>
+              <envFile>${project.basedir}/.env</envFile>
+              <detachedMode>true</detachedMode>
+              <projectName>${docker.compose.project}</projectName>
+              <skip>${is.down.skipped}</skip>
             </configuration>
           </execution>
         </executions>

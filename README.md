@@ -23,16 +23,14 @@ This project contains a simple Java REST backend connected to a database that ca
 ## Developer Instructions
 
 ### Prerequisites
-- Linux system would be benefitial (otherwise you will need to rewrite the build-and-redeploy.sh script, the rest should work on Windows the same way)
 - Docker & Docker-Compose installed
 - Java & Maven installed
 
 ### How to get started
-1. Run `build-tools/build-and-redeploy.sh`. This will trigger the following process:
-   1. Run mvn clean install to build application WAR file.
-   2. Build new docker image `com.mdevoc/simple-java-rest-backend` and tag it with the current version number. The docker image is based on the Payara Full server images and adds the WAR file to the server.
-   3. Stop running app and database containers if there are any.
-   4. Use `docker-compose` to run new containers
+1. Run `mvn clean install -P redeploy`. This will trigger the following process:
+   1. Run `docker-compose down -d` to remove existing containers (app + db) and the docker network
+   2. Build new docker image `com.mdevoc/simple-java-rest-backend` and tag it with the current version number. The docker image is based on the Payara Full server images and adds the WAR file to the server. Previously built images with this tag will be removed.
+   3. Use `docker-compose up -d` to run new containers
       1. Setup a network so appserver and database container can communicate
       2. Run appserver based on previously built image
       3. Runn database base on official PostgreSQL image
@@ -44,8 +42,11 @@ This project contains a simple Java REST backend connected to a database that ca
 
 ### Useful commands
 
-| Task                        | Command                                                                                                                           |
-| :-------------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
-| Build Docker Image          | `mvn clean install`                                                                                                               |
-| Start Postgres DB           | `docker run --name postgres -e POSTGRES_USER=[user] -e POSTGRES_PASSWORD=[password] -e POSTGRES_DB=[db] -p 5432:5432 -d postgres` |
-| View logfile from appserver | `docker logs --tail=[number of lines] [container name]`                                                                           |
+| Task                            | Command                                                                                                                           |
+| :------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------- |
+| Build Docker Image              | `mvn clean install`                                                                                                               |
+| Build Docker Image, Clean & Run | `mvn clean install -P redeploy`                                                                                                   |
+| Cleanup containers & network    | `mvn clean -P shutdown`                                                                                                           |
+| Run containers                  | `mvn install -P run`                                                                                                              |
+| Start Postgres DB manually      | `docker run --name postgres -e POSTGRES_USER=[user] -e POSTGRES_PASSWORD=[password] -e POSTGRES_DB=[db] -p 5432:5432 -d postgres` |
+| View logfile from appserver     | `docker logs --tail=[number of lines] [container name]`                                                                           |
