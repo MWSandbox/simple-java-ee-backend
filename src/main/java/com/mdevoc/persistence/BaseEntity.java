@@ -1,5 +1,7 @@
 package com.mdevoc.persistence;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -8,6 +10,7 @@ import javax.persistence.SequenceGenerator;
 import java.util.Objects;
 
 @MappedSuperclass
+@Schema(description = "Base schema for the entities of the application.")
 public abstract class BaseEntity {
 
     private static final String SEQUENCE_GENERATOR_NAME = "idSequenceGenerator";
@@ -16,6 +19,8 @@ public abstract class BaseEntity {
     @SequenceGenerator(name = SEQUENCE_GENERATOR_NAME, sequenceName = "id_sequence", allocationSize = 1,
             initialValue = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR_NAME)
+    @Schema(description = "The id is the primary key for an entity and can be used as unique key. Once persisted, this value will always be required.",
+            nullable = true)
     private Long id;
 
     @Override

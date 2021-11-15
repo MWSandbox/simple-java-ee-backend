@@ -1,6 +1,7 @@
 package com.mdevoc.counter;
 
 import com.mdevoc.persistence.BaseEntity;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -9,9 +10,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "counter")
+@Schema(description = "A counter stores a numeric value that can be incremented.")
 public class Counter extends BaseEntity {
 
     @NotNull
+    @Schema(description = "The current count of the counter.")
     private long count;
 
     @Override
