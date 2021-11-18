@@ -10,3 +10,7 @@ RUN chmod 751 $PAYARA_LIB_PATH/$JDBC_DRIVER_NAME
 
 # Install generated WAR file on Payara
 COPY target/${WAR_NAME}.war ${DEPLOY_DIR}/simple-java-rest-backend.war
+
+# Setup init hook for configurable container start (e.g. setup ALIASE)
+COPY --chown=payara:payara init_0_simple_java_rest_backend.sh ${SCRIPT_DIR}/
+RUN chmod 751 ${SCRIPT_DIR}/init_0_simple_java_rest_backend.sh
