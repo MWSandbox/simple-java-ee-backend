@@ -3,8 +3,8 @@
 This project contains a simple Java REST backend connected to a database that can be used to test your architecture
 setup (not production ready!). Docker & Docker-Compose are being used to make the installation easy. This project can be
 used as it is to test two-tier-architectures (app + db), but can be extended to a three-tier-architecture by providing a
-frontend that is connected to the backend via REST API. A simple frontend to play around is currently in development and
-will be released in a different repository.
+frontend that is connected to the backend via REST API. A simple frontend to play around is available here:
+[Simple React Frontend](https://github.com/MWSandbox/simple-react-frontend)
 
 ![Architecture Diagram](./docs/resources/architecture-diagram.png)
 
