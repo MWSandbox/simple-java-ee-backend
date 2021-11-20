@@ -227,12 +227,12 @@
             </goals>
             <configuration>
               <composeFile>${project.basedir}/docker-compose.yml</composeFile>
-              <envFile>${project.basedir}/.env</envFile>
               <detachedMode>true</detachedMode>
               <projectName>${docker.compose.project}</projectName>
               <skip>${is.up.skipped}</skip>
               <envVars>
-                <db-password>simpledb</db-password>
+                <db_password>simpledb</db_password>
+                <version>${project.version}</version>
               </envVars>
             </configuration>
           </execution>
@@ -244,10 +244,12 @@
             </goals>
             <configuration>
               <composeFile>${project.basedir}/docker-compose.yml</composeFile>
-              <envFile>${project.basedir}/.env</envFile>
               <detachedMode>true</detachedMode>
               <projectName>${docker.compose.project}</projectName>
               <skip>${is.down.skipped}</skip>
+              <envVars>
+                <version>${project.version}</version>
+              </envVars>
             </configuration>
           </execution>
         </executions>

@@ -2,15 +2,17 @@ services:
   simple-db:
     image: postgres
     environment:
-      POSTGRES_USER: simple-db
-      POSTGRES_PASSWORD: simple-db
-      POSTGRES_DB: simple-db
+      POSTGRES_USER: simpledb
+      POSTGRES_PASSWORD: simpledb
+      POSTGRES_DB: simpledb
     ports:
       - "9001:5432"
     networks:
       - simple-network
   simple-java-rest-backend:
-    image: com.mdevoc/simple-java-rest-backend:${BACKEND_VERSION}
+    image: "simple-java-rest-backend:${version}"
+    environment:
+      - db_password
     ports:
       - "8080:8080"
       - "4848:4848"
