@@ -17,6 +17,10 @@
     <is.up.skipped>true</is.up.skipped>
     <is.down.skipped>true</is.down.skipped>
     <docker.remote.registry>YOUR-REMOTE-REGISTRY-HERE</docker.remote.registry>
+    <db.user.local>simpledb</db.user.local>
+    <db.name.local>simpledb</db.name.local>
+    <db.password.local>simpledb</db.password.local>
+    <db.endpoint.local>mdevoc_simple-db_1</db.endpoint.local>
   </properties>
 
   <profiles>
@@ -231,7 +235,10 @@
               <projectName>${docker.compose.project}</projectName>
               <skip>${is.up.skipped}</skip>
               <envVars>
-                <db_password>simpledb</db_password>
+                <db_user>${db.user.local}</db_user>
+                <db_name>${db.name.local}</db_name>
+                <db_password>${db.password.local}</db_password>
+                <db_endpoint>${db.endpoint.local}</db_endpoint>
                 <version>${project.version}</version>
               </envVars>
             </configuration>
