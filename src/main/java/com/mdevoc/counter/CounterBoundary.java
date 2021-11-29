@@ -31,151 +31,151 @@ import static javax.ws.rs.core.Response.ResponseBuilder;
 @Transactional
 public class CounterBoundary {
 
-    private static final String DELETION_SUCCESS_MESSAGE = "Deletion successful";
-    private static final String DELETION_NOT_FOUND_MESSAGE = "Counter is not available";
-    private static final String DELETION_ERROR_MESSAGE = "Could not delete counter: ";
+  private static final String DELETION_SUCCESS_MESSAGE = "Deletion successful";
+  private static final String DELETION_NOT_FOUND_MESSAGE = "Counter is not available";
+  private static final String DELETION_ERROR_MESSAGE = "Could not delete counter: ";
 
-    @Inject
-    CounterDAO counterDao;
+  @Inject
+  CounterDAO counterDao;
 
-    @GET
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets a single counter")
-    @Parameter(name = "id", description = "Primary key of the counter", required = true)
-    @APIResponse(responseCode = "200", description = "Found counter in database",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = Counter.class)))
-    @APIResponse(responseCode = "404", description = "The provided ID does not match any counter in the database",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SimpleResponse.class)))
-    public Response get(@PathParam("id") long id) {
-        Optional<Counter> optionalCounter = counterDao.findById(id);
+  @GET
+  @Path("{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Operation(summary = "Gets a single counter")
+  @Parameter(name = "id", description = "Primary key of the counter", required = true)
+  @APIResponse(responseCode = "200", description = "Found counter in database",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = Counter.class)))
+  @APIResponse(responseCode = "404", description = "The provided ID does not match any counter in the database",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = SimpleResponse.class)))
+  public Response get(@PathParam("id") long id) {
+    Optional<Counter> optionalCounter = counterDao.findById(id);
 
-        if (optionalCounter.isPresent()) {
-            return Response.status(Response.Status.OK)
-                    .entity(optionalCounter.get())
-                    .build();
-        }
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity(new SimpleResponse("Could not find counter with id " + id))
-                .build();
+    if (optionalCounter.isPresent()) {
+      return Response.status(Response.Status.OK)
+          .entity(optionalCounter.get())
+          .build();
     }
+    return Response.status(Response.Status.NOT_FOUND)
+        .entity(new SimpleResponse("Could not find counter with id " + id))
+        .build();
+  }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets all counters")
-    @APIResponse(responseCode = "200",
-            description = "Successfully query for all counters. Will return an empty array, if no counters have been found.",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = Counter.class, type = SchemaType.ARRAY)))
-    public Response getAll() {
-        List<Counter> counters = counterDao.findAll();
-        return Response.status(Response.Status.OK)
-                .entity(counters)
-                .build();
-    }
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Operation(summary = "Gets all counters")
+  @APIResponse(responseCode = "200",
+      description = "Successfully query for all counters. Will return an empty array, if no counters have been found.",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = Counter.class, type = SchemaType.ARRAY)))
+  public Response getAll() {
+    List<Counter> counters = counterDao.findAll();
+    return Response.status(Response.Status.OK)
+        .entity(counters)
+        .build();
+  }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Creates a single counter")
-    @RequestBody(description = "Counter to be created. ID can be left empty and will be overwritten if provided.",
-            required = true)
-    @APIResponse(responseCode = "200", description = "Counter created successfully",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = Counter.class)))
-    public Response createCounter(Counter counter) {
-        counterDao.insert(counter);
-        return Response.status(Response.Status.OK)
-                .entity(counter)
-                .build();
-    }
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Operation(summary = "Creates a single counter")
+  @RequestBody(description = "Counter to be created. ID can be left empty and will be overwritten if provided.",
+      required = true)
+  @APIResponse(responseCode = "200", description = "Counter created successfully",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = Counter.class)))
+  public Response createCounter(Counter counter) {
+    counterDao.insert(counter);
+    return Response.status(Response.Status.OK)
+        .entity(counter)
+        .build();
+  }
 
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Updates a single counter")
-    @RequestBody(description = "Counter with updated values.", required = true)
-    @APIResponse(responseCode = "200", description = "Counter updated successfully",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = Counter.class)))
-    @APIResponse(responseCode = "404",
-            description = "The ID of the provided counter does not match any counter in the database",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SimpleResponse.class)))
-    public Response updateCounter(Counter counter) {
-        ResponseBuilder responseBuilder;
-        try {
-            counterDao.update(counter);
-            responseBuilder = Response.status(Response.Status.OK)
-                    .entity(counter);
-        } catch (IllegalArgumentException ex) {
-            responseBuilder = Response.status(Response.Status.NOT_FOUND)
-                    .entity(new SimpleResponse("Could not update entity: " + ex.getMessage()));
-        }
-        return responseBuilder.build();
+  @PUT
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Operation(summary = "Updates a single counter")
+  @RequestBody(description = "Counter with updated values.", required = true)
+  @APIResponse(responseCode = "200", description = "Counter updated successfully",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = Counter.class)))
+  @APIResponse(responseCode = "404",
+      description = "The ID of the provided counter does not match any counter in the database",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = SimpleResponse.class)))
+  public Response updateCounter(Counter counter) {
+    ResponseBuilder responseBuilder;
+    try {
+      counterDao.update(counter);
+      responseBuilder = Response.status(Response.Status.OK)
+          .entity(counter);
+    } catch (IllegalArgumentException ex) {
+      responseBuilder = Response.status(Response.Status.NOT_FOUND)
+          .entity(new SimpleResponse("Could not update entity: " + ex.getMessage()));
     }
+    return responseBuilder.build();
+  }
 
-    @DELETE
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Deletes a single counter")
-    @Parameter(name = "id", description = "Primary key of the counter", required = true)
-    @APIResponse(responseCode = "200", description = "Counter deleted successfully",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SimpleResponse.class)))
-    @APIResponse(responseCode = "404",
-            description = "The provided ID does not match any counter in the database",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SimpleResponse.class)))
-    @APIResponse(responseCode = "410",
-            description = "There was an error when trying to delete the counter",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SimpleResponse.class)))
-    public Response delete(@PathParam("id") long id) {
-        ResponseBuilder responseBuilder;
-        try {
-            counterDao.deleteById(id);
-            responseBuilder = Response.status(Response.Status.OK)
-                    .entity(new SimpleResponse(DELETION_SUCCESS_MESSAGE));
-        } catch (NoSuchElementException ex) {
-            responseBuilder = Response.status(Response.Status.NOT_FOUND)
-                    .entity(new SimpleResponse(DELETION_NOT_FOUND_MESSAGE));
-        } catch (IllegalArgumentException ex) {
-            responseBuilder = Response.status(Response.Status.GONE)
-                    .entity(new SimpleResponse(DELETION_ERROR_MESSAGE + ex.getMessage()));
-        }
-        return responseBuilder.build();
+  @DELETE
+  @Path("{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Operation(summary = "Deletes a single counter")
+  @Parameter(name = "id", description = "Primary key of the counter", required = true)
+  @APIResponse(responseCode = "200", description = "Counter deleted successfully",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = SimpleResponse.class)))
+  @APIResponse(responseCode = "404",
+      description = "The provided ID does not match any counter in the database",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = SimpleResponse.class)))
+  @APIResponse(responseCode = "410",
+      description = "There was an error when trying to delete the counter",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = SimpleResponse.class)))
+  public Response delete(@PathParam("id") long id) {
+    ResponseBuilder responseBuilder;
+    try {
+      counterDao.deleteById(id);
+      responseBuilder = Response.status(Response.Status.OK)
+          .entity(new SimpleResponse(DELETION_SUCCESS_MESSAGE));
+    } catch (NoSuchElementException ex) {
+      responseBuilder = Response.status(Response.Status.NOT_FOUND)
+          .entity(new SimpleResponse(DELETION_NOT_FOUND_MESSAGE));
+    } catch (IllegalArgumentException ex) {
+      responseBuilder = Response.status(Response.Status.GONE)
+          .entity(new SimpleResponse(DELETION_ERROR_MESSAGE + ex.getMessage()));
     }
+    return responseBuilder.build();
+  }
 
-    @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Deletes all counters")
-    @APIResponse(responseCode = "200", description = "Successfully deleted all counters",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SimpleResponse.class)))
-    @APIResponse(responseCode = "404",
-            description = "The provided ID does not match any counter in the database",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SimpleResponse.class)))
-    @APIResponse(responseCode = "410",
-            description = "There was an error when trying to delete the counter",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SimpleResponse.class)))
-    public Response deleteAll() {
-        ResponseBuilder responseBuilder;
-        try {
-            counterDao.deleteAll();
-            responseBuilder = Response.status(Response.Status.OK)
-                    .entity(new SimpleResponse(DELETION_SUCCESS_MESSAGE));
-        } catch (NoSuchElementException ex) {
-            responseBuilder = Response.status(Response.Status.NOT_FOUND)
-                    .entity(new SimpleResponse(DELETION_NOT_FOUND_MESSAGE));
-        } catch (IllegalArgumentException ex) {
-            responseBuilder = Response.status(Response.Status.GONE)
-                    .entity(new SimpleResponse(DELETION_ERROR_MESSAGE + ex.getMessage()));
-        }
-        return responseBuilder.build();
+  @DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+  @Operation(summary = "Deletes all counters")
+  @APIResponse(responseCode = "200", description = "Successfully deleted all counters",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = SimpleResponse.class)))
+  @APIResponse(responseCode = "404",
+      description = "The provided ID does not match any counter in the database",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = SimpleResponse.class)))
+  @APIResponse(responseCode = "410",
+      description = "There was an error when trying to delete the counter",
+      content = @Content(mediaType = MediaType.APPLICATION_JSON,
+          schema = @Schema(implementation = SimpleResponse.class)))
+  public Response deleteAll() {
+    ResponseBuilder responseBuilder;
+    try {
+      counterDao.deleteAll();
+      responseBuilder = Response.status(Response.Status.OK)
+          .entity(new SimpleResponse(DELETION_SUCCESS_MESSAGE));
+    } catch (NoSuchElementException ex) {
+      responseBuilder = Response.status(Response.Status.NOT_FOUND)
+          .entity(new SimpleResponse(DELETION_NOT_FOUND_MESSAGE));
+    } catch (IllegalArgumentException ex) {
+      responseBuilder = Response.status(Response.Status.GONE)
+          .entity(new SimpleResponse(DELETION_ERROR_MESSAGE + ex.getMessage()));
     }
+    return responseBuilder.build();
+  }
 }

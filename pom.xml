@@ -239,6 +239,7 @@
                 <db_name>${db.name.local}</db_name>
                 <db_password>${db.password.local}</db_password>
                 <db_endpoint>${db.endpoint.local}</db_endpoint>
+                <mp_openapi_servers>http://localhost:8080/simple-java-rest-backend</mp_openapi_servers>
                 <version>${project.version}</version>
               </envVars>
             </configuration>

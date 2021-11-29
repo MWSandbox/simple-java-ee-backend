@@ -16,6 +16,7 @@ services:
       - db_user
       - db_name
       - db_endpoint
+      - mp_openapi_servers
     ports:
       - "8080:8080"
       - "4848:4848"
