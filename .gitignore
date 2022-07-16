@@ -2,6 +2,9 @@
 .idea/
 *.iml
 
+### VS-Code ###
+settings.json
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
